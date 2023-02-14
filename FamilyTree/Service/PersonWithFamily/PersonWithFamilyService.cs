@@ -30,6 +30,7 @@ namespace FamilyTree.Service.PersonWithFamily
             _context.Person.Add(model);
             await _context.SaveChangesAsync();
 
+            var save = false;
             if (dto.SpouseIds != null && dto.SpouseIds.IsEmpty() == false)
             {
                 var personSpouse = new PersonSpouse(model.Id, dto.SpouseIds.First());
@@ -38,6 +39,8 @@ namespace FamilyTree.Service.PersonWithFamily
 
                 var spousePerson = new PersonSpouse(dto.SpouseIds.First(), model.Id);
                 _context.PersonSpouse.Add(spousePerson);
+
+                save = true;
             }
 
             if (dto.ChildrenIds != null && dto.ChildrenIds.IsEmpty() == false)
@@ -57,9 +60,11 @@ namespace FamilyTree.Service.PersonWithFamily
                     _context.PersonFamily.Update(childFamily);
                 }
 
-                await _context.SaveChangesAsync();
+                save = true;
             }
-            
+
+            if(save==true)await _context.SaveChangesAsync();
+
             return ServiceResponseDTO.CreatedSuccessfully;
         }
 
