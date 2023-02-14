@@ -17,6 +17,7 @@ namespace FamilyTree.Model
         public static ServiceResponseDTO CreatedSuccessfully = new(ResponseStatusEnum.Success,ResponseMessageEnum.CreatedSuccessfully.ToString());
         public static ServiceResponseDTO UpdatedSuccessfully = new(ResponseStatusEnum.Success,ResponseMessageEnum.UpdatedSuccessfully.ToString());
         public static ServiceResponseDTO DeletedSuccessfully = new(ResponseStatusEnum.Success,ResponseMessageEnum.DeletedSuccessfully.ToString());
+        public static ServiceResponseDTO UploadSuccessfully = new(ResponseStatusEnum.Success,ResponseMessageEnum.UploadSuccessfully.ToString());
     }
     public class ServiceResponseDTO<T>
     {

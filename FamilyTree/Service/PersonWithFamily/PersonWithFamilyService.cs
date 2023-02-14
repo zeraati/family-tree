@@ -6,13 +6,19 @@ using FamilyTree.Helper.Extension;
 using Microsoft.EntityFrameworkCore;
 using FamilyTree.Model.PersonFamily;
 using FamilyTree.Model.PersonWithFamily;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace FamilyTree.Service.PersonWithFamily
 {
     public class PersonWithFamilyService : IPersonWithFamilyService
     {
         private DataContext _context;
-        public PersonWithFamilyService(DataContext context) => _context = context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public PersonWithFamilyService(DataContext context, IWebHostEnvironment webHostEnvironment)
+        {
+            _context = context;
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         public async Task<ServiceResponseDTO> CreateAsync(PersonWithFamilyDTO dto)
         {
@@ -46,15 +52,15 @@ namespace FamilyTree.Service.PersonWithFamily
             if (dto.ChildrenIds != null && dto.ChildrenIds.IsEmpty() == false)
             {
                 var childId = dto.ChildrenIds.First();
-                var childFamily= await _context.PersonFamily.FirstOrDefaultAsync(x => x.PersonId == childId);
+                var childFamily = await _context.PersonFamily.FirstOrDefaultAsync(x => x.PersonId == childId);
 
                 if (childFamily == null)
                 {
-                    var personFamily=new PersonFamily(dto.ChildrenIds.First());
+                    var personFamily = new PersonFamily(dto.ChildrenIds.First());
                     SetParent(personFamily, model);
                     _context.PersonFamily.Add(personFamily);
                 }
-                else if(childFamily != null)
+                else if (childFamily != null)
                 {
                     SetParent(childFamily, model);
                     _context.PersonFamily.Update(childFamily);
@@ -63,7 +69,7 @@ namespace FamilyTree.Service.PersonWithFamily
                 save = true;
             }
 
-            if(save==true)await _context.SaveChangesAsync();
+            if (save == true) await _context.SaveChangesAsync();
 
             return ServiceResponseDTO.CreatedSuccessfully;
         }
@@ -88,7 +94,7 @@ namespace FamilyTree.Service.PersonWithFamily
 
         public async Task<ServiceResponseDTO> DeleteAsync(int id)
         {
-            var model = await _context.Person.Include(x=>x.PersonFamily).FirstOrDefaultAsync(x=>x.Id==id);
+            var model = await _context.Person.Include(x => x.PersonFamily).FirstOrDefaultAsync(x => x.Id == id);
             if (model == null) return ServiceResponseDTO.UpdatedSuccessfully;
 
             if (model.PersonFamily != null) _context.PersonFamily.Remove(model.PersonFamily);
@@ -130,10 +136,20 @@ namespace FamilyTree.Service.PersonWithFamily
             return new ServiceResponseDTO<List<ListPersonWithFamilyDTO>>(result);
         }
 
-        private static void SetParent(PersonFamily personFamily,Person parent)
+        private static void SetParent(PersonFamily personFamily, Person parent)
         {
             if (parent.GenderId == Model.Enum.GenderEnum.Male) personFamily.FatherId = parent.Id;
             else if (parent.GenderId == Model.Enum.GenderEnum.Female) personFamily.MotherId = parent.Id;
+        }
+
+        public async Task<ServiceResponseDTO> UploadPhotoAsync(int personId,IFormFile file)
+        {
+            var directory = Path.Combine(_webHostEnvironment.WebRootPath,"person");
+            var filePath = Path.Combine(directory, personId+".jpg");
+
+            using (var stream = new FileStream(filePath, FileMode.Create)) file.CopyTo(stream);
+
+            return ServiceResponseDTO.UploadSuccessfully;
         }
     }
 }

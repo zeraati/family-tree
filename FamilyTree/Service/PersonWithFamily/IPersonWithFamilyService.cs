@@ -11,5 +11,7 @@ namespace FamilyTree.Service.PersonWithFamily
         Task<ServiceResponseDTO> DeleteAsync(int id);
 
         Task<ServiceResponseDTO<List<ListPersonWithFamilyDTO>>> GetAllAsync();
+
+        Task<ServiceResponseDTO> UploadPhotoAsync(int personId, IFormFile file);
     }
 }

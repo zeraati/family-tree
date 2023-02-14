@@ -6,5 +6,6 @@
         UpdatedSuccessfully = 2,
         DeletedSuccessfully = 3,
         AnErrorOccurred = 4,
+        UploadSuccessfully = 5,
     }
 }

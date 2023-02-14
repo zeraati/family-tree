@@ -37,6 +37,17 @@ const PersonFamilyDelete = (id) => {
     CallAPI(url, method)
 }
 
+const PersonFamilyUploadPhoto = (id) => {
+
+    var input = document.querySelector('input[type="file"]')
+    var data = new FormData()
+    data.append('file', input.files[0])
+
+    let url = '/api/PersonWithFamily/UploadPhoto/' + id;
+    let method = 'POST';
+    CallAPI(url, method, data)
+}
+
 const CallAPI = async (url, method = 'POST', body = {}) => {debugger
     const response = await fetch(url, {
         method: method,

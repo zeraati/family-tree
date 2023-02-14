@@ -8,6 +8,7 @@ namespace FamilyTree.Model.PersonFamily
         public string? FullName { get; set; }
         public GenderEnum? GenderId { get; set; }
         public string? Gender { get; set; }
+        public string? Photo { get; set; }
 
         public int? FatherId { get; set; }
         public string? FatherFullName { get; set; }

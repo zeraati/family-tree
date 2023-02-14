@@ -1954,7 +1954,7 @@ var FamilyTree = function (e, t) {
     (FamilyTree.isObject = function (e) {
         return e && "object" == typeof e && !Array.isArray(e) && null !== e;
     }),
-    (FamilyTree.fileUploadDialog = function (e) {
+    (FamilyTree.fileUploadDialog = function (e) {debugger
         var t = document.createElement("INPUT");
         t.setAttribute("type", "file"),
             (t.style.display = "none"),

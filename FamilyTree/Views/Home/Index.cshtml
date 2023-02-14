@@ -11,12 +11,14 @@
             mouseScrool: FamilyTree.action.none,
             nodeBinding: {
                 field_0: "name",
+                img_0: "photo"
             },
             nodes: data,
             //nodes: [{ id: 1, pids: [2], Name: "Amber McKenzie", gender: "female" }]
             editForm: {
                 addMore: null,
                 generateElementsFromFields: false,
+                photoBinding: "photo",
                 elements: [
                     { type: 'textbox', label: 'Full Name', binding: 'name' },
                     {
@@ -24,6 +26,7 @@
                         options: [{ value: 'male', text: 'Male' }, { value: 'female', text: 'Female' }],
                         label: 'Gender', binding: 'gender'
                     },
+                    { type: 'textbox', label: 'Photo Url', binding: 'ImgUrl', btn: 'Upload' }
                 ],
                 buttons: { share: null, pdf: null }
             },

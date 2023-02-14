@@ -26,6 +26,7 @@ namespace FamilyTree.Controllers
                 {
                     var personFamilyTree = new PersonFamilyTreeDTO(person.PersonId, person.FullName, person.Gender.ToLower())
                     {
+                        photo=person.Photo,
                         fid = person.FatherId,
                         mid = person.MotherId,
                         pids = person.SpouseIds,
