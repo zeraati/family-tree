@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Manage Family";
+}
+
+<div style="width: 100%; height: 700px" id="tree"></div>
+
+@section scripts{
+    <script>
+        var data = JSON.parse('@ViewData["family-tree"]'.replaceAll("&quot;", '"'));
+        var family = new FamilyTree(document.getElementById("tree"), {
+            mouseScrool: FamilyTree.action.none,
+            nodeBinding: {
+                field_0: "name",
+            },
+            nodes: data,
+            //nodes: [{ id: 1, pids: [2], Name: "Amber McKenzie", gender: "female" }]
+            editForm: {
+                addMore: null,
+                generateElementsFromFields: false,
+                elements: [
+                    { type: 'textbox', label: 'Full Name', binding: 'name' },
+                    {
+                        type: 'select',
+                        options: [{ value: 'male', text: 'Male' }, { value: 'female', text: 'Female' }],
+                        label: 'Gender', binding: 'gender'
+                    },
+                ],
+                buttons: { share: null, pdf: null }
+            },
+            enableSearch: false,
+            //nodeMouseClick: FamilyTree.action.none,
+            nodeTreeMenu: true,
+        });
+    </script>
+}
