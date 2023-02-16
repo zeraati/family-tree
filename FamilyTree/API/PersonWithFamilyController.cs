@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FamilyTree.Service.PersonWithFamily;
 using FamilyTree.Model.PersonWithFamily;
+using Newtonsoft.Json.Linq;
 
 namespace FamilyTree.API
 {
@@ -36,6 +37,15 @@ namespace FamilyTree.API
         public async Task<IActionResult> UploadPhotoAsync(int id,IFormFile file)
         {
             var result = await _personWithFamilyService.UploadPhotoAsync(id,file);
+            return Ok(result);
+        }
+
+        [HttpPost,Route("api/OrgChartJS")]
+        public async Task<IActionResult> OrgChartJS(JObject obj)
+        {
+            var root = obj["n"][0]["p"][0];
+            var p = obj["n"][0]["p"];
+            var result = new {root = new {p=p}};
             return Ok(result);
         }
     }

@@ -40,11 +40,11 @@ namespace FamilyTree.Service.PersonWithFamily
             if (dto.SpouseIds != null && dto.SpouseIds.IsEmpty() == false)
             {
                 var personSpouse = new PersonSpouse(model.Id, dto.SpouseIds.First());
-                _context.PersonSpouse.Add(personSpouse);
+                _context.Add(personSpouse);
 
 
                 var spousePerson = new PersonSpouse(dto.SpouseIds.First(), model.Id);
-                _context.PersonSpouse.Add(spousePerson);
+                _context.Add(spousePerson);
 
                 save = true;
             }
@@ -58,12 +58,12 @@ namespace FamilyTree.Service.PersonWithFamily
                 {
                     var personFamily = new PersonFamily(dto.ChildrenIds.First());
                     SetParent(personFamily, model);
-                    _context.PersonFamily.Add(personFamily);
+                    _context.Add(personFamily);
                 }
                 else if (childFamily != null)
                 {
                     SetParent(childFamily, model);
-                    _context.PersonFamily.Update(childFamily);
+                    _context.Update(childFamily);
                 }
 
                 save = true;
@@ -85,7 +85,7 @@ namespace FamilyTree.Service.PersonWithFamily
                 model.LastName = dto.LastName;
                 model.GenderId = dto.GenderId;
 
-                _context.Person.Update(model);
+                _context.Update(model);
                 await _context.SaveChangesAsync();
             }
 
@@ -97,7 +97,7 @@ namespace FamilyTree.Service.PersonWithFamily
             var model = await _context.Person.Include(x => x.PersonFamily).FirstOrDefaultAsync(x => x.Id == id);
             if (model == null) return ServiceResponseDTO.UpdatedSuccessfully;
 
-            if (model.PersonFamily != null) _context.PersonFamily.Remove(model.PersonFamily);
+            if (model.PersonFamily != null) _context.Remove(model.PersonFamily);
 
             var children = await _context.PersonFamily.Where(x => x.FatherId == id || x.MotherId == id).ToListAsync();
             if (children.IsEmpty() == false)
@@ -109,22 +109,22 @@ namespace FamilyTree.Service.PersonWithFamily
                         if (child.FatherId == id) child.FatherId = null;
                         else if (child.MotherId == id) child.MotherId = null;
 
-                        _context.PersonFamily.Update(child);
+                        _context.Update(child);
                     }
 
-                    else _context.PersonFamily.Remove(child);
+                    else _context.Remove(child);
                 }
             }
 
             if (model.PersonSpouse.IsEmpty() == false)
             {
-                _context.PersonSpouse.RemoveRange(model.PersonSpouse);
+                _context.RemoveRange(model.PersonSpouse);
 
                 var personSpouses = await _context.PersonSpouse.Where(x => x.SpouseId == id).ToListAsync();
-                _context.PersonSpouse.RemoveRange(personSpouses);
+                _context.RemoveRange(personSpouses);
             }
 
-            _context.Person.Remove(model);
+            _context.Remove(model);
             await _context.SaveChangesAsync();
 
             return ServiceResponseDTO.DeletedSuccessfully;
@@ -144,10 +144,22 @@ namespace FamilyTree.Service.PersonWithFamily
 
         public async Task<ServiceResponseDTO> UploadPhotoAsync(int personId,IFormFile file)
         {
-            var directory = Path.Combine(_webHostEnvironment.WebRootPath,"person");
-            var filePath = Path.Combine(directory, personId+".jpg");
+            var person = await _context.Person.FirstAsync(x=>x.Id==personId);
+            var fileName = personId+"_"+person.FirstName + person.LastName;
+            fileName = fileName.Replace(" ", "_");
+
+            var extention =Path.GetExtension(file.FileName);
+            fileName += "." + extention;
+
+            var directory = Path.Combine(_webHostEnvironment.WebRootPath,"Person");
+            var filePath = Path.Combine(directory, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create)) file.CopyTo(stream);
+
+            
+            person.Photo = fileName;
+            _context.Update(person);
+            await _context.SaveChangesAsync();
 
             return ServiceResponseDTO.UploadSuccessfully;
         }

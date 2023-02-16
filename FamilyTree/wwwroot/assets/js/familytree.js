@@ -1334,7 +1334,7 @@ var FamilyTree = function (e, t) {
                 if (!1 !== i) {
                     var n = r.obj.get(e),
                         l = { data: FamilyTree.mergeDeep(n, i) };
-                    if (!1 === FamilyTree.events.publish("save", [r, l])) return;                   
+                    if (!1 === FamilyTree.events.publish("save", [r, l])) return;
                     r.obj.updateNode(l.data, null, !0), r.hide();
                     PersonFamilyUpdate(l.data);
                 }
@@ -1954,13 +1954,13 @@ var FamilyTree = function (e, t) {
     (FamilyTree.isObject = function (e) {
         return e && "object" == typeof e && !Array.isArray(e) && null !== e;
     }),
-    (FamilyTree.fileUploadDialog = function (e) {debugger
+    (FamilyTree.fileUploadDialog = function (e) {
         var t = document.createElement("INPUT");
         t.setAttribute("type", "file"),
             (t.style.display = "none"),
             (t.onchange = function () {
                 var t = this.files[0];
-                e(t);
+                PersonFamilyUploadPhoto(e.nodeId, t);
             }),
             document.body.appendChild(t),
             t.click();
@@ -7245,7 +7245,7 @@ var FamilyTree = function (e, t) {
     (FamilyTree.elements = {}),
     (FamilyTree.elements.textbox = function (e, t, i, r) {
         var a = FamilyTree.elements._vidrf(e, t, r);
-        if (a.doNotRender) return { html: "" };
+        if (a.doNotRender || (t.binding == 'Photo' && isNaN(e.id))) return { html: "" };
         var n = "";
         return (
             t.btn && (n = `<a href="#" bft-input-btn="" class="bft-link bft-link-bft-button">${t.btn}</a>`),

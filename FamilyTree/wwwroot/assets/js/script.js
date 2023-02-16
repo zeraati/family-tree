@@ -9,10 +9,10 @@ const PersonFamilyUpdate = (data) => {
     });
 
     const body = {
-        tempeId: isNaN(data.id) ? data.id:null,
+        tempeId: isNaN(data.id) ? data.id : null,
         personId: !isNaN(data.id) ? data.id : null,
         firsrtName: fullName[0],
-        lastName: fullName.length > 1 ? fullName[1]:"",
+        lastName: fullName.length > 1 ? fullName[1] : "",
         genderId: data.gender == 'male' ? 1 : data.gender == 'female' ? 2 : null,
         fatherId: !isNaN(data.fid) ? data.fid : null,
         motherId: !isNaN(data.mid) ? data.mid : null,
@@ -34,39 +34,40 @@ const PersonFamilyUpdate = (data) => {
 const PersonFamilyDelete = (id) => {
     let url = '/api/PersonWithFamily/' + id;
     let method = 'DELETE';
-    CallAPI(url, method)
+    CallAPI(url, method);
 }
 
-const PersonFamilyUploadPhoto = (id) => {
-
-    var input = document.querySelector('input[type="file"]')
-    var data = new FormData()
-    data.append('file', input.files[0])
+const PersonFamilyUploadPhoto = (id, file) => {
+    const data = new FormData()
+    data.append('file', file)
 
     let url = '/api/PersonWithFamily/UploadPhoto/' + id;
     let method = 'POST';
-    CallAPI(url, method, data)
+    CallAPI(url, method, data);
 }
 
-const CallAPI = async (url, method = 'POST', body = {}) => {debugger
-    const response = await fetch(url, {
-        method: method,
-        body: method == 'POST' || method == 'PUT' ? JSON.stringify(body) : null,
-        headers: { 'Content-Type': 'application/json' }
-    });
+const CallAPI = async (url, method = 'POST', body = {}) => {
 
+    var options = { method: method };
+
+    if (url.includes('UploadPhoto')) options.body = body;
+    else if (method == 'POST' || method == 'PUT') {
+        options.body = JSON.stringify(body);
+        options.headers={ 'Content-Type':'application/json' }
+    }
+
+    const response = await fetch(url, options);
     const result = await response.json();
-    Toast(result.message, result.status);
-    if (response.ok == false) {
+
+    if (response.ok == true) {
+        Toast(result.message, result.status);
+        setTimeout(() => { location.reload(); }, 1000);
+    }
+    else {
+        Toast(result.message, result.status);
         console.log(method, url, JSON.stringify(body));
         console.log(result);
     }
-    //if (response.ok && result.status) {
-    //    Toast(result.message);
-    //} else {
-    //    Toast()
-    //    console.log(result);
-    //}
 }
 
 const Toast = (message, statusId) => {
@@ -79,15 +80,13 @@ const Toast = (message, statusId) => {
 
     SnackBar({
         message: message,
-        //width: "1000px",
         status: status,// null=1 || info=1 || success=3 || warning=4 || danger=5 ,
-        //icon: "plus" // danger || info || plus || ...
-        //timeout: 5000 // ms
         dismissible: false,
-        //speed: 500
         position: "bl" // tl || tc || tr || bl || bc || br
-        //fixed: true
+        //fixed: true,
+        //width: "1000px",
+        //speed: 500,
+        //timeout: 5000 // ms
+        //icon: "plus" // danger || info || plus || ...
     });
-
-    if (statusId == 1) { setTimeout(() => { location.reload(); }, 1000); }
 }
