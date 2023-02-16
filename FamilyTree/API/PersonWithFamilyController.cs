@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FamilyTree.Service.PersonWithFamily;
 using FamilyTree.Model.PersonWithFamily;
+using System.Text.Json.Nodes;
 using Newtonsoft.Json.Linq;
 
 namespace FamilyTree.API
@@ -40,13 +41,40 @@ namespace FamilyTree.API
             return Ok(result);
         }
 
-        [HttpPost,Route("api/OrgChartJS")]
-        public async Task<IActionResult> OrgChartJS(JObject obj)
+        [HttpPost("/api/OrgChartJS")]
+        public async Task<IActionResult> OrgChartJS([FromBody] object param)
         {
-            var root = obj["n"][0]["p"][0];
-            var p = obj["n"][0]["p"];
-            var result = new {root = new {p=p}};
+            dynamic result = new {};
+
+            var obj = JObject.Parse(param.ToString());
+            var root = obj["r"].FirstOrDefault();
+            
+            if(root != null)
+            {
+                obj = JObject.Parse(param.ToString().Replace("null", "0").Replace($"\"{root}\",",""));
+                var p = obj["n"][0]["p"];
+                result = JObject.Parse($"{{\"{root}\":{{}}}}");
+                result[root] = new JObject()["p"]=p;
+            }
+            
             return Ok(result);
         }
+    }
+
+    public class x {
+        public List<node> n { get; set; }//نودها
+        public int c { get; set; }
+        public List<string> r { get; set; }//روت اصلی
+        public string v { get; set; }//ورژن
+    }
+
+    public class node
+    {
+        public List<string?> p { get; set; }//پرنت - آید پرنت +‌مختصات - اولین رکورد آید است
+        public List<string> c { get; set; }// چایلدها
+        public List<int> q { get; set; }
+        public int g { get; set; }
+        public int e { get; set; }
+        public int i { get; set; }
     }
 }
