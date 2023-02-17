@@ -2,6 +2,7 @@
 using FamilyTree.Model;
 using Microsoft.AspNetCore.Mvc;
 using FamilyTree.Service.PersonWithFamily;
+using FamilyTree.Helper.Extension;
 
 namespace FamilyTree.Controllers
 {
@@ -26,7 +27,9 @@ namespace FamilyTree.Controllers
                 {
                     var personFamilyTree = new PersonFamilyTreeDTO(person.PersonId, person.FullName, person.Gender.ToLower())
                     {
-                        photo=person.Photo,
+                        birthDate= person.BirthDate !=null? person.BirthDate.GetValueOrDefault().ToDate():null,
+                        deathDate= person.DeathDate != null ? person.DeathDate.GetValueOrDefault().ToDate() : null,
+                        photo =person.Photo,
                         fid = person.FatherId,
                         mid = person.MotherId,
                         pids = person.SpouseIds,

@@ -14,6 +14,8 @@ namespace FamilyTree.Model.PersonWithFamily
         public string FirsrtName { get; set; }
         public string LastName { get; set; }
         public GenderEnum GenderId { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public DateTime? DeathDate{get; set;}
 
         public int? FatherId { get; set; }
         public int? MotherId { get; set; }

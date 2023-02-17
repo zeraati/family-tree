@@ -16,6 +16,8 @@ namespace FamilyTree.Model.Mapper
                     FullName = x.FirstName + " " + x.LastName,
                     GenderId = x.GenderId,
                     Gender = x.GenderId.ToString(),
+                    BirthDate=x.BirthDate,
+                    DeathDate = x.DeathDate,
                     Photo=x.Photo!=null?"Person/"+x.Photo:null,
                     FatherId = x.PersonFamily != null ? x.PersonFamily.FatherId : null,
                     FatherFullName = x.PersonFamily != null && x.PersonFamily.Father != null ? x.PersonFamily.Father.FirstName + " " + x.PersonFamily.Father.LastName : null,

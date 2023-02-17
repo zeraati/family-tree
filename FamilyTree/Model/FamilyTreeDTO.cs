@@ -15,6 +15,8 @@
         public int? fid { get; set; }
         public string name { get; set; }
         public string gender { get; set; }
+        public string birthDate { get; set; }
+        public string deathDate { get; set; }
         public string? photo { get; set; }
     }
 }

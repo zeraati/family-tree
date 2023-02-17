@@ -7256,9 +7256,9 @@ var FamilyTree = function (e, t) {
                 id: a.id,
                 value: a.value,
             }
-    );
-    if (t.binding == 'photo' && e['photo']) result.html = result.html.replaceAll('</a>', '</a><a href="#" onclick="PersonFamilyRemovePhoto('+e.id+')" style="right:57px;top:-1px;position:absolute">Remove</a>');
-    return result;
+        );
+        if (t.binding == 'photo' && e['photo']) result.html = result.html.replaceAll('</a>', '</a><a href="#" onclick="PersonFamilyRemovePhoto(' + e.id + ')" style="right:57px;top:-1px;position:absolute">Remove</a>');
+        return result;
     }),
     (FamilyTree.elements.checkbox = function (e, t, i, r) {
         var a = FamilyTree.elements._vidrf(e, t, r);
@@ -7405,6 +7405,7 @@ var FamilyTree = function (e, t) {
         for (r = 0; r < n.length; r++) {
             var o = n[r],
                 s = o.getAttribute("data-binding");
+            if (s == 'photo' && o.value == "") continue;
             "checkbox" == o.type.toLowerCase() ? (l[s] = o.checked) : (l[s] = o.value);
         }
         return l;

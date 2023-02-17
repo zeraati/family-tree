@@ -6,7 +6,6 @@ using FamilyTree.Helper.Extension;
 using Microsoft.EntityFrameworkCore;
 using FamilyTree.Model.PersonFamily;
 using FamilyTree.Model.PersonWithFamily;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace FamilyTree.Service.PersonWithFamily
 {
@@ -23,7 +22,7 @@ namespace FamilyTree.Service.PersonWithFamily
         public async Task<ServiceResponseDTO> CreateAsync(PersonWithFamilyDTO dto)
         {
             dto.LastName ??= "";
-            var model = new Person(dto.FirsrtName, dto.LastName, dto.GenderId);
+            var model = new Person(dto.FirsrtName, dto.LastName, dto.GenderId, dto.BirthDate, dto.DeathDate);
 
             if (dto.FatherId > 0 || dto.MotherId > 0)
             {
@@ -84,6 +83,8 @@ namespace FamilyTree.Service.PersonWithFamily
                 model.FirstName = dto.FirsrtName;
                 model.LastName = dto.LastName;
                 model.GenderId = dto.GenderId;
+                model.BirthDate = dto.BirthDate;
+                model.DeathDate= dto.DeathDate;
 
                 _context.Update(model);
                 await _context.SaveChangesAsync();

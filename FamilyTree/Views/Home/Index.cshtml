@@ -26,6 +26,10 @@
                         options: [{ value: 'male', text: 'Male' }, { value: 'female', text: 'Female' }],
                         label: 'Gender', binding: 'gender'
                     },
+                    [
+                        { type: 'date', label: 'Date Of Birth', binding: 'birthDate' },
+                        { type: 'date', label: 'Date Of Death', binding: 'deathDate' }
+                    ],
                     { type: 'textbox', label: 'Photo Url', binding: 'photo', btn: 'Upload' }
                 ],
                 buttons: { share: null, pdf: null }
