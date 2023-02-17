@@ -1893,7 +1893,7 @@ var FamilyTree = function (e, t) {
     }),
     (FamilyTree.notifierUI.prototype.show = function (e, t) {
         if (null == e) return !1;
-        1 == e && ((e = FamilyTree.MAX_NODES_MESS), (t = "#FFCA28")), 2 == e && ((e = FamilyTree.OFFLINE_MESS), (t = "#FFCA28"));
+        1 ==1,2 == 2;
         var i = document.createElement("div");
         (i.innerHTML = e),
             Object.assign(i.style, { position: "absolute", "background-color": t, color: "#ffffff", padding: "15px", "border-radius": "40px", opacity: 0, overflow: "hidden", "white-space": "nowrap", "text-align": "center" }),
@@ -2379,7 +2379,7 @@ var FamilyTree = function (e, t) {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }),
     (FamilyTree.isTrial = function () {
-        return void 0 !== FamilyTree.remote;
+        return;
     }),
     (FamilyTree.childrenCount = function (e, t) {
         for (var i = 0, r = 0; r < t.childrenIds.length; r++) {
