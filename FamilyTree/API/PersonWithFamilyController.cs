@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FamilyTree.Service.PersonWithFamily;
+﻿using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Mvc;
 using FamilyTree.Model.PersonWithFamily;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json.Linq;
+using FamilyTree.Service.PersonWithFamily;
 
 namespace FamilyTree.API
 {
@@ -34,10 +33,17 @@ namespace FamilyTree.API
             return Ok(result);
         }
 
-        [HttpPost("[action]/{id}")]
+        [HttpPost("Photo/{id}")]
         public async Task<IActionResult> UploadPhotoAsync(int id,IFormFile file)
         {
             var result = await _personWithFamilyService.UploadPhotoAsync(id,file);
+            return Ok(result);
+        }
+
+        [HttpDelete("Photo/{id}")]
+        public async Task<IActionResult> DeletePhotoAsync(int id)
+        {
+            var result = await _personWithFamilyService.DeletePhotoAsync(id);
             return Ok(result);
         }
 
@@ -61,20 +67,4 @@ namespace FamilyTree.API
         }
     }
 
-    public class x {
-        public List<node> n { get; set; }//نودها
-        public int c { get; set; }
-        public List<string> r { get; set; }//روت اصلی
-        public string v { get; set; }//ورژن
-    }
-
-    public class node
-    {
-        public List<string?> p { get; set; }//پرنت - آید پرنت +‌مختصات - اولین رکورد آید است
-        public List<string> c { get; set; }// چایلدها
-        public List<int> q { get; set; }
-        public int g { get; set; }
-        public int e { get; set; }
-        public int i { get; set; }
-    }
 }

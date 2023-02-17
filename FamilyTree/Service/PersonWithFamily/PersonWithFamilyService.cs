@@ -142,22 +142,35 @@ namespace FamilyTree.Service.PersonWithFamily
             else if (parent.GenderId == Model.Enum.GenderEnum.Female) personFamily.MotherId = parent.Id;
         }
 
-        public async Task<ServiceResponseDTO> UploadPhotoAsync(int personId,IFormFile file)
+        public async Task<ServiceResponseDTO> UploadPhotoAsync(int personId, IFormFile file)
         {
-            var person = await _context.Person.FirstAsync(x=>x.Id==personId);
-            var fileName = personId+"_"+person.FirstName + person.LastName;
+            var person = await _context.Person.FirstAsync(x => x.Id == personId);
+            var fileName = personId + "_" + person.FirstName + person.LastName;
             fileName = fileName.Replace(" ", "_");
 
-            var extention =Path.GetExtension(file.FileName);
-            fileName += "." + extention;
+            var extention = Path.GetExtension(file.FileName);
+            fileName += extention;
 
-            var directory = Path.Combine(_webHostEnvironment.WebRootPath,"Person");
+            var directory = Path.Combine(_webHostEnvironment.WebRootPath, "Person");
             var filePath = Path.Combine(directory, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create)) file.CopyTo(stream);
 
-            
+
             person.Photo = fileName;
+            _context.Update(person);
+            await _context.SaveChangesAsync();
+
+            return ServiceResponseDTO.UploadSuccessfully;
+        }
+
+        public async Task<ServiceResponseDTO> DeletePhotoAsync(int personId)
+        {
+            var person = await _context.Person.FirstAsync(x => x.Id == personId);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Person",person.Photo);
+            File.Delete(filePath);
+
+            person.Photo = null;
             _context.Update(person);
             await _context.SaveChangesAsync();
 

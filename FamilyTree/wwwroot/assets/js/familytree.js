@@ -1893,7 +1893,7 @@ var FamilyTree = function (e, t) {
     }),
     (FamilyTree.notifierUI.prototype.show = function (e, t) {
         if (null == e) return !1;
-        1 ==1,2 == 2;
+        1 == 1, 2 == 2;
         var i = document.createElement("div");
         (i.innerHTML = e),
             Object.assign(i.style, { position: "absolute", "background-color": t, color: "#ffffff", padding: "15px", "border-radius": "40px", opacity: 0, overflow: "hidden", "white-space": "nowrap", "text-align": "center" }),
@@ -7247,7 +7247,7 @@ var FamilyTree = function (e, t) {
         var a = FamilyTree.elements._vidrf(e, t, r);
         if (a.doNotRender || (t.binding == 'photo' && isNaN(e.id))) return { html: "" };
         var n = "";
-        return (
+        let result = (
             t.btn && (n = `<a href="#" bft-input-btn="" class="bft-link bft-link-bft-button">${t.btn}</a>`),
             {
                 html: `<div class="bft-form-field" style="min-width: ${i};">\n                    <div class="bft-input" data-bft-input="" ${a.disabledAttribute} ${a.vlidators}>\n                        <label for="${a.id
@@ -7256,7 +7256,9 @@ var FamilyTree = function (e, t) {
                 id: a.id,
                 value: a.value,
             }
-        );
+    );
+    if (t.binding == 'photo' && e['photo']) result.html = result.html.replaceAll('</a>', '</a><a href="#" onclick="PersonFamilyRemovePhoto('+e.id+')" style="right:57px;top:-1px;position:absolute">Remove</a>');
+    return result;
     }),
     (FamilyTree.elements.checkbox = function (e, t, i, r) {
         var a = FamilyTree.elements._vidrf(e, t, r);

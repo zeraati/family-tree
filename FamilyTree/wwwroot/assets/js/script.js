@@ -41,16 +41,22 @@ const PersonFamilyUploadPhoto = (id, file) => {
     const data = new FormData()
     data.append('file', file)
 
-    let url = '/api/PersonWithFamily/UploadPhoto/' + id;
+    let url = '/api/PersonWithFamily/Photo/' + id;
     let method = 'POST';
     CallAPI(url, method, data);
+}
+
+const PersonFamilyRemovePhoto = function (id) {
+    let url = '/api/PersonWithFamily/Photo/' + id;
+    let method = 'DELETE';
+    CallAPI(url, method);
 }
 
 const CallAPI = async (url, method = 'POST', body = {}) => {
 
     var options = { method: method };
 
-    if (url.includes('UploadPhoto')) options.body = body;
+    if (url.includes('/Photo/')) options.body = body;
     else if (method == 'POST' || method == 'PUT') {
         options.body = JSON.stringify(body);
         options.headers={ 'Content-Type':'application/json' }
