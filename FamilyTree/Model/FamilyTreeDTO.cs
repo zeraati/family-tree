@@ -18,5 +18,6 @@
         public string birthDate { get; set; }
         public string deathDate { get; set; }
         public string? photo { get; set; }
+        public string? backgroundColor { get; set; }
     }
 }

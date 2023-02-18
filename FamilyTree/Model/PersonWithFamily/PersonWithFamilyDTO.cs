@@ -22,5 +22,7 @@ namespace FamilyTree.Model.PersonWithFamily
         public List<int>? SpouseIds { get; set; }
 
         public List<int>? ChildrenIds { get; set; }
+
+        public string? BackgroundColor { get; set; }
     }
 }

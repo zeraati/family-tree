@@ -2,11 +2,15 @@
     ViewData["Title"] = "Manage Family";
 }
 
+@section styles {
+    @Html.Raw(ViewData["item-color-style"])
+}
+
 <div style="width: 100%; height: 700px" id="tree"></div>
 
 @section scripts{
     <script>
-        var data = JSON.parse('@ViewData["family-tree"]'.replaceAll("&quot;", '"').replaceAll('Person', 'https://' + window.location.host + '/Person'));
+        var data = JSON.parse('@Html.Raw(ViewData["family-tree"])'.replaceAll('Person', 'https://' + window.location.host + '/Person'));
 
         FamilyTree.templates.tommy.nodeCircleMenuButton =
             FamilyTree.templates.tommy_female.nodeCircleMenuButton =
@@ -33,17 +37,18 @@
                 generateElementsFromFields: false,
                 photoBinding: "photo",
                 elements: [
-                    { type: 'textbox', label: 'Full Name', binding: 'name' },
+                    [{ type: 'textbox', label: 'Full Name', binding: 'name' },
                     {
                         type: 'select',
                         options: [{ value: 'male', text: 'Male' }, { value: 'female', text: 'Female' }],
                         label: 'Gender', binding: 'gender'
-                    },
+                    }],
                     [
                         { type: 'date', label: 'Date Of Birth', binding: 'birthDate' },
                         { type: 'date', label: 'Date Of Death', binding: 'deathDate' }
                     ],
-                    { type: 'textbox', label: 'Photo Url', binding: 'photo', btn: 'Upload' }
+                    { type: 'textbox', label: 'Photo Url', binding: 'photo', btn: 'Upload' },
+                    { type: 'textbox', label: 'Background Color', binding: 'backgroundColor' }
                 ],
                 buttons: { share: null, pdf: null }
             },

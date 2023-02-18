@@ -7246,6 +7246,12 @@ var FamilyTree = function (e, t) {
     (FamilyTree.elements.textbox = function (e, t, i, r) {
         var a = FamilyTree.elements._vidrf(e, t, r);
         if (a.doNotRender || (t.binding == 'photo' && isNaN(e.id))) return { html: "" };
+
+        if (t.binding.includes('Color')) {
+            if (a.value == '' && e.gender == 'male') a.value = '#039be5';
+            if (a.value == '' && e.gender == 'female') a.value = '#f57c00';
+        }
+
         var n = "";
         let result = (
             t.btn && (n = `<a href="#" bft-input-btn="" class="bft-link bft-link-bft-button">${t.btn}</a>`),
@@ -7257,7 +7263,13 @@ var FamilyTree = function (e, t) {
                 value: a.value,
             }
         );
+
         if (t.binding == 'photo' && e['photo']) result.html = result.html.replaceAll('</a>', '</a><a href="#" onclick="PersonFamilyRemovePhoto(' + e.id + ')" style="right:57px;top:-1px;position:absolute">Remove</a>');
+        if (t.binding.includes('Color')) {
+            if (result.html.includes('data-bft-input-disabled')) result.html = '';
+            else result.html = result.html.replaceAll('type="text"', 'type="color"').replaceAll('maxlength="256"', 'style="width:50%"');
+        }
+
         return result;
     }),
     (FamilyTree.elements.checkbox = function (e, t, i, r) {

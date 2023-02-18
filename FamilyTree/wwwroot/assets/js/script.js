@@ -14,6 +14,7 @@ const PersonFamilyUpdate = (data) => {
         firsrtName: fullName[0],
         lastName: fullName.length > 1 ? fullName[1] : "",
         genderId: data.gender == 'male' ? 1 : data.gender == 'female' ? 2 : null,
+        backgroundColor: data.backgroundColor,
         birthDate: data.birthDate == "" ? null : data.birthDate,
         deathDate: data.deathDate == "" ? null : data.deathDate,
         fatherId: !isNaN(data.fid) ? data.fid : null,
@@ -21,6 +22,9 @@ const PersonFamilyUpdate = (data) => {
         spouseIds: spouseIds,
         childrenIds: childrenIds
     };
+
+    if (body.backgroundColor == '#039be5' && data.gender == 'male') body.backgroundColor = null;
+    if (body.backgroundColor == '#f57c00' && data.gender == 'female') body.backgroundColor = null;
 
     let url = '/api/PersonWithFamily';
     let method = 'POST';
@@ -61,7 +65,7 @@ const CallAPI = async (url, method = 'POST', body = {}) => {
     if (url.includes('/Photo/')) options.body = body;
     else if (method == 'POST' || method == 'PUT') {
         options.body = JSON.stringify(body);
-        options.headers={ 'Content-Type':'application/json' }
+        options.headers = { 'Content-Type': 'application/json' }
     }
 
     const response = await fetch(url, options);

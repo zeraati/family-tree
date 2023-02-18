@@ -22,7 +22,7 @@ namespace FamilyTree.Service.PersonWithFamily
         public async Task<ServiceResponseDTO> CreateAsync(PersonWithFamilyDTO dto)
         {
             dto.LastName ??= "";
-            var model = new Person(dto.FirsrtName, dto.LastName, dto.GenderId, dto.BirthDate, dto.DeathDate);
+            var model = new Person(dto.FirsrtName, dto.LastName, dto.GenderId, dto.BirthDate, dto.DeathDate,dto.BackgroundColor);
 
             if (dto.FatherId > 0 || dto.MotherId > 0)
             {
@@ -85,6 +85,7 @@ namespace FamilyTree.Service.PersonWithFamily
                 model.GenderId = dto.GenderId;
                 model.BirthDate = dto.BirthDate;
                 model.DeathDate= dto.DeathDate;
+                model.BackgroundColor = dto.BackgroundColor;
 
                 _context.Update(model);
                 await _context.SaveChangesAsync();

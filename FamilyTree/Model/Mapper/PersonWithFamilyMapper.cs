@@ -19,6 +19,7 @@ namespace FamilyTree.Model.Mapper
                     BirthDate=x.BirthDate,
                     DeathDate = x.DeathDate,
                     Photo=x.Photo!=null?"Person/"+x.Photo:null,
+                    BackgroundColor=x.BackgroundColor,
                     FatherId = x.PersonFamily != null ? x.PersonFamily.FatherId : null,
                     FatherFullName = x.PersonFamily != null && x.PersonFamily.Father != null ? x.PersonFamily.Father.FirstName + " " + x.PersonFamily.Father.LastName : null,
                     MotherId = x.PersonFamily != null ? x.PersonFamily.MotherId : null,

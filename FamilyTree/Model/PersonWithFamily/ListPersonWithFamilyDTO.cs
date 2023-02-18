@@ -11,6 +11,7 @@ namespace FamilyTree.Model.PersonFamily
         public DateTime? BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
         public string? Photo { get; set; }
+        public string? BackgroundColor { get; set; }
 
         public int? FatherId { get; set; }
         public string? FatherFullName { get; set; }
