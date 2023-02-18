@@ -11,8 +11,11 @@ namespace FamilyTree.Entity
             GenderId = genderId;
         }
 
-        public Person(string firstName, string lastName, GenderEnum genderId,DateTime? birthDate, DateTime? deathDate):base()
+        public Person(string firstName, string lastName, GenderEnum genderId,DateTime? birthDate, DateTime? deathDate)
         {
+            FirstName = firstName;
+            LastName = lastName;
+            GenderId = genderId;
             BirthDate = birthDate;
             DeathDate = deathDate;
         }

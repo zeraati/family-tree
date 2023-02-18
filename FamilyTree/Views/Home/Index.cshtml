@@ -6,7 +6,20 @@
 
 @section scripts{
     <script>
-        var data = JSON.parse('@ViewData["family-tree"]'.replaceAll("&quot;", '"').replaceAll('Person','https://'+window.location.host+'/Person'));
+        var data = JSON.parse('@ViewData["family-tree"]'.replaceAll("&quot;", '"').replaceAll('Person', 'https://' + window.location.host + '/Person'));
+
+        FamilyTree.templates.tommy.nodeCircleMenuButton =
+            FamilyTree.templates.tommy_female.nodeCircleMenuButton =
+            FamilyTree.templates.tommy_male.nodeCircleMenuButton =
+            {
+                radius: 20,
+                x: 227,
+                y: 97,
+                color: "#fff",
+                stroke: "#aeaeae",
+            };
+
+
         var family = new FamilyTree(document.getElementById("tree"), {
             mouseScrool: FamilyTree.action.none,
             nodeBinding: {
@@ -36,7 +49,19 @@
             },
             enableSearch: false,
             //nodeMouseClick: FamilyTree.action.none,
-            nodeTreeMenu: true,
+            //nodeTreeMenu: true,
+            nodeCircleMenu: {
+                son: {
+                    icon: FamilyTree.icon.son(30, 30, "#039BE5"),
+                    text: "Add son",
+                    color: "white",
+                },
+                daughter: {
+                    icon: FamilyTree.icon.daughter(30, 30, "#F57C00"),
+                    text: "Add daughter",
+                    color: "white",
+                },
+            }
         });
 
         family.editUI.on('element-btn-click', function (sender, args) {
@@ -45,6 +70,113 @@
                 formData.append('file', file);
                 alert('upload the file');
             })
+        });
+
+        family.nodeCircleMenuUI.on("show", function (sender, args) {
+            var node = family.getNode(args.nodeId);
+            delete args.menu.father;
+            delete args.menu.mother;
+            delete args.menu.wife;
+            delete args.menu.husband;
+
+            if (FamilyTree.isNEU(node.mid)) {
+                args.menu.mother = {
+                    icon: FamilyTree.icon.mother(30, 30, "#F57C00"),
+                    text: "Add mother",
+                    color: "white",
+                };
+            }
+
+            if (FamilyTree.isNEU(node.fid)) {
+                args.menu.father = {
+                    icon: FamilyTree.icon.father(30, 30, "#039BE5"),
+                    text: "Add father",
+                    color: "white",
+                };
+            }
+
+            if (node.gender == "male") {
+                args.menu.wife = {
+                    icon: FamilyTree.icon.wife(30, 30, "#F57C00"),
+                    text: "Add wife",
+                    color: "white",
+                };
+            } else if (node.gender == "female" && node.pids.length == 0) {
+                args.menu.husband = {
+                    icon: FamilyTree.icon.husband(30, 30, "#F57C00"),
+                    text: "Add husband",
+                    color: "white",
+                };
+            }
+        });
+
+        family.nodeCircleMenuUI.on("click", function (sender, args) {
+            var node = family.getNode(args.nodeId);
+            var data = {};
+            if (
+                args.menuItemName == "father" ||
+                args.menuItemName == "son" ||
+                args.menuItemName == "husband"
+            )
+                data.gender = "male";
+            else if (
+                args.menuItemName == "mother" ||
+                args.menuItemName == "daughter" ||
+                args.menuItemName == "wife"
+            )
+                data.gender = "female";
+
+            switch (args.menuItemName) {
+                case "father":
+                    if (!FamilyTree.isNEU(node.mid)) data.pids = [node.mid];
+                    family.addParentNode(args.nodeId, "fid", data);
+                    break;
+                case "mother":
+                    if (!FamilyTree.isNEU(node.fid)) data.pids = [node.fid];
+                    family.addParentNode(args.nodeId, "mid", data);
+                    break;
+                case "son":
+                    if (node.gender == "male") data.fid = args.nodeId;
+                    else if (node.gender == "female") {
+                        data.mid = args.nodeId;
+                        if (node.pids.length > 0) data.fid = node.pids[0];
+                    }
+                    family.addChildNode(data);
+                    break;
+                case "daughter":
+                    if (node.gender == "male") data.fid = args.nodeId;
+                    else if (node.gender == "female") {
+                        data.mid = args.nodeId;
+                        if (node.pids.length > 0) data.fid = node.pids[0];
+                    }
+                    family.addChildNode(data);
+                    break;
+                case "husband":
+                    data.pids = [args.nodeId];
+                    family.addPartnerNode(data);
+                    break;
+                case "wife":
+                    data.pids = [args.nodeId];
+                    family.addPartnerNode(data);
+                    break;
+                default:
+            }
+        });
+
+        family.nodeCircleMenuUI.on("drop", function (sender, args) {
+            family.addClink(args.from, args.to).draw(FamilyTree.action.update);
+        });
+
+        family.nodeCircleMenuUI.on("mouseenter", function (sender, args) {
+            if (args.menuItem.text == "Remove node") {
+                var node = document.querySelector('[data-n-id="' + args.from + '"]');
+                node.style.opacity = 0.5;
+            }
+        });
+
+        family.nodeCircleMenuUI.on("mouseout", function (sender, args) {
+            var node = document.querySelector('[data-n-id="' + args.from + '"]');
+            node.style.opacity = 1;
         });
     </script>
 }
