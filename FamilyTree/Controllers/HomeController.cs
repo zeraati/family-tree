@@ -32,6 +32,7 @@ namespace FamilyTree.Controllers
                         deathDate = person.DeathDate != null ? person.DeathDate.GetValueOrDefault().ToDate() : null,
                         photo = person.Photo,
                         backgroundColor = person.BackgroundColor,
+                        description = person.Description,
                         fid = person.FatherId,
                         mid = person.MotherId,
                         pids = person.SpouseIds,

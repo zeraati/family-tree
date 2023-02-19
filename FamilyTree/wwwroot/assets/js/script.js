@@ -15,6 +15,7 @@ const PersonFamilyUpdate = (data) => {
         lastName: fullName.length > 1 ? fullName[1] : "",
         genderId: data.gender == 'male' ? 1 : data.gender == 'female' ? 2 : null,
         backgroundColor: data.backgroundColor,
+        description: data.description,
         birthDate: data.birthDate == "" ? null : data.birthDate,
         deathDate: data.deathDate == "" ? null : data.deathDate,
         fatherId: !isNaN(data.fid) ? data.fid : null,

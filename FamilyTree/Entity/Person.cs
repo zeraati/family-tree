@@ -11,7 +11,8 @@ namespace FamilyTree.Entity
             GenderId = genderId;
         }
 
-        public Person(string firstName, string lastName, GenderEnum genderId,DateTime? birthDate, DateTime? deathDate,string? backgroundColor)
+        public Person(string firstName, string lastName, GenderEnum genderId,DateTime? birthDate, DateTime? deathDate,
+            string? backgroundColor,string? description)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -19,6 +20,7 @@ namespace FamilyTree.Entity
             BirthDate = birthDate;
             DeathDate = deathDate;
             BackgroundColor = backgroundColor;
+            Description = description;
         }
 
         public int Id { get; set; }
@@ -33,6 +35,7 @@ namespace FamilyTree.Entity
         public string? Note { get; set; }
         public string? Photo { get; set; }
         public string? BackgroundColor { get; set; }
+        public string? Description { get; set; }
 
         public virtual Job? Job { get; set; }
         public virtual Location? Location { get; set; }
