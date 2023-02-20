@@ -50,6 +50,10 @@
                 img_0: "photo"
             },
             nodes: data,
+            nodeMenu: {
+                details: { text: "Details" },
+                edit: { text: "Edit" }
+            },
             //nodes: [{ id: 1, pids: [2], Name: "Amber McKenzie", gender: "female" }]
             editForm: {
                 addMore: null,
@@ -75,7 +79,7 @@
             enableSearch: false,
             //nodeMouseClick: FamilyTree.action.none,
             //nodeTreeMenu: true,
-            nodeCircleMenu: {
+            /*nodeCircleMenu: {
                 son: {
                     icon: FamilyTree.icon.son(30, 30, "#039BE5"),
                     text: "Add son",
@@ -86,9 +90,10 @@
                     text: "Add daughter",
                     color: "white",
                 },
-            }
+            }*/
         });
 
+        /*
         family.editUI.on('element-btn-click', function (sender, args) {
             FamilyTree.fileUploadDialog(args, function (file) {
                 var formData = new FormData();
@@ -202,6 +207,6 @@
         family.nodeCircleMenuUI.on("mouseout", function (sender, args) {
             var node = document.querySelector('[data-n-id="' + args.from + '"]');
             node.style.opacity = 1;
-        });
+        });*/
     </script>
 }
