@@ -1561,6 +1561,44 @@ var FamilyTree = function (e, t) {
                         } else if ("details" === l) {
                             s = n.obj.getNode(i);
                             n.obj.editUI.show(s.id, !0);
+                        } else if ("father" === l) {
+                            var data = { gender: "male" };
+                            s = n.obj.getNode(i);
+                            if (!FamilyTree.isNEU(s.mid)) data.pids = [s.mid];
+                            family.addParentNode(s.id, "fid", data);
+                        } else if ("mother" === l) {
+                            var data = { gender: "female" };
+                            s = n.obj.getNode(i);
+                            if (!FamilyTree.isNEU(s.fid)) data.pids = [s.fid];
+                            family.addParentNode(s.id, "mid", data);
+                        } else if ("husband" === l) {
+                            var data = { gender: "male" };
+                            s = n.obj.getNode(i);
+                            data.pids = [s.id];
+                            family.addPartnerNode(data);
+                        } else if ("wife" === l) {
+                            var data = { gender: "female" };
+                            s = n.obj.getNode(i);
+                            data.pids = [s.id];
+                            family.addPartnerNode(data);
+                        } else if ("son" === l) {
+                            var data = { gender:"male" };
+                            s = n.obj.getNode(i);
+                            if (s.gender == "male") data.fid = s.id;
+                            else if (s.gender == "female") {
+                                data.mid = s.id;
+                                if (s.pids.length > 0) data.fid = s.pids[0];
+                            }
+                            n.obj.addChildNode(data);
+                        } else if ("daughter" === l) {
+                            var data = { gender: "female" };
+                            s = n.obj.getNode(i);
+                            if (s.gender == "male") data.fid = s.id;
+                            else if (s.gender == "female") {
+                                data.mid = s.id;
+                                if (s.pids.length > 0) data.fid = s.pids[0];
+                            }
+                            n.obj.addChildNode(data);
                         } else
                             "remove" === l
                                 ? n.obj.removeNode(i, null, !0)

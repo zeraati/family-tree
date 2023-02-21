@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace FamilyTree.Entity
 {
     public class PersonFamily
@@ -8,6 +10,7 @@ namespace FamilyTree.Entity
             PersonId = personId;
         }
 
+        [Required]
         public int PersonId { get; set; }
         public int? FatherId { get; set; }
         public int? MotherId { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace FamilyTree.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FamilyTree.Entity
 {
     public class Job
     {
@@ -8,6 +10,8 @@
         }
 
         public int Id { get; set; }
+
+        [Required]
         public string Title { get; set; }
 
         public virtual ICollection<Person> Person { get; } = new List<Person>();

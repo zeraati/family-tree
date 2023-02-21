@@ -1,4 +1,6 @@
-﻿namespace FamilyTree.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FamilyTree.Entity
 {
     public class PersonSpouse
     {
@@ -9,7 +11,11 @@
         }
 
         public int Id { get; set; }
+
+        [Required]
         public int PersonId { get; set; }
+
+        [Required]
         public int SpouseId { get; set; }
 
         public virtual Person? Person { get; set; }
