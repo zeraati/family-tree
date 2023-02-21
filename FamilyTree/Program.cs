@@ -1,5 +1,6 @@
 using FamilyTree.Helper;
 using FamilyTree.Service.PersonWithFamily;
+using FamilyTree.Service.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     services.AddScoped<IPersonWithFamilyService, PersonWithFamilyService>();
+    services.AddScoped<IUserService, UserService>();
 }
 
 var app = builder.Build();

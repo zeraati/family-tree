@@ -3,10 +3,33 @@
 }
 
 @section styles {
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            font-family: Helvetica;
+        }
+
+        #tree {
+            width: 100%;
+            height: 100%;
+        }
+
     @Html.Raw(ViewData["item-color-style"])
+
+    </style>
 }
 
-<div style="width: 100%; height: 700px" id="tree"></div>
+@if(ViewData["family-tree"]=="IsNotLogin"){
+    <p style="color:red;text-align:center;margin-top: 3rem;font-weight: bold;">Your not login!</p>
+}
+else
+{
+<div id="tree"></div>
+}
 
 @section scripts{
     <script>
@@ -20,7 +43,7 @@
             var disabledAttr = readOnly ? 'disabled' : '';
             return {
                 html: `<label for="${id}">${editElement.label}</label>
-                                              <textarea ${disabledAttr} ${readOnlyAttr} id="${id}" name="${id}" style="width: 100%;height: 100px;" data-binding="${editElement.binding}">${value}</textarea>`,
+                                                                      <textarea ${disabledAttr} ${readOnlyAttr} id="${id}" name="${id}" style="width: 100%;height: 100px;" data-binding="${editElement.binding}">${value}</textarea>`,
                 id: id,
                 value: value
             };
@@ -31,30 +54,17 @@
             .replaceAll('\n', '\\n');
         var data = JSON.parse(stringJson);
 
-        FamilyTree.templates.tommy.nodeCircleMenuButton =
-            FamilyTree.templates.tommy_female.nodeCircleMenuButton =
-            FamilyTree.templates.tommy_male.nodeCircleMenuButton =
-            {
-                radius: 20,
-                x: 227,
-                y: 97,
-                color: "#fff",
-                stroke: "#aeaeae",
-            };
-
-
         var family = new FamilyTree(document.getElementById("tree"), {
-            mouseScrool: FamilyTree.action.none,
+            //mouseScrool: FamilyTree.action.none,
+            menu: {
+                pdf: { text: "Export PDF" }
+            },
             nodeBinding: {
                 field_0: "name",
                 img_0: "photo"
             },
             nodes: data,
-            nodeMenu: {
-                details: { text: "Details" },
-                edit: { text: "Edit" }
-            },
-            //nodes: [{ id: 1, pids: [2], Name: "Amber McKenzie", gender: "female" }]
+            nodeMenu: {},
             editForm: {
                 addMore: null,
                 generateElementsFromFields: false,
@@ -77,23 +87,9 @@
                 buttons: { share: null, pdf: null }
             },
             enableSearch: false,
-            //nodeMouseClick: FamilyTree.action.none,
-            //nodeTreeMenu: true,
-            /*nodeCircleMenu: {
-                son: {
-                    icon: FamilyTree.icon.son(30, 30, "#039BE5"),
-                    text: "Add son",
-                    color: "white",
-                },
-                daughter: {
-                    icon: FamilyTree.icon.daughter(30, 30, "#F57C00"),
-                    text: "Add daughter",
-                    color: "white",
-                },
-            }*/
         });
 
-        /*
+
         family.editUI.on('element-btn-click', function (sender, args) {
             FamilyTree.fileUploadDialog(args, function (file) {
                 var formData = new FormData();
@@ -102,25 +98,22 @@
             })
         });
 
-        family.nodeCircleMenuUI.on("show", function (sender, args) {
-            var node = family.getNode(args.nodeId);
-            delete args.menu.father;
-            delete args.menu.mother;
-            delete args.menu.wife;
-            delete args.menu.husband;
+        family.nodeMenuUI.on('show', function (sender, args) {
 
-            if (FamilyTree.isNEU(node.mid)) {
-                args.menu.mother = {
-                    icon: FamilyTree.icon.mother(30, 30, "#F57C00"),
-                    text: "Add mother",
-                    color: "white",
-                };
-            }
+            var node = family.getNode(args.firstNodeId);
 
             if (FamilyTree.isNEU(node.fid)) {
                 args.menu.father = {
                     icon: FamilyTree.icon.father(30, 30, "#039BE5"),
                     text: "Add father",
+                    color: "white",
+                };
+            }
+
+            if (FamilyTree.isNEU(node.mid)) {
+                args.menu.mother = {
+                    icon: FamilyTree.icon.mother(30, 30, "#F57C00"),
+                    text: "Add mother",
                     color: "white",
                 };
             }
@@ -138,75 +131,20 @@
                     color: "white",
                 };
             }
+
+            args.menu.son = {
+                icon: FamilyTree.icon.son(30, 30, "#039BE5"),
+                text: "Add son",
+                color: "white",
+            };
+            args.menu.daughter = {
+                icon: FamilyTree.icon.daughter(30, 30, "#F57C00"),
+                text: "Add daughter",
+                color: "white",
+            };
+
+            args.menu.details = { text: "Details" };
+            args.menu.edit = { text: "Edit" };
         });
-
-        family.nodeCircleMenuUI.on("click", function (sender, args) {
-            var node = family.getNode(args.nodeId);
-            var data = {};
-            if (
-                args.menuItemName == "father" ||
-                args.menuItemName == "son" ||
-                args.menuItemName == "husband"
-            )
-                data.gender = "male";
-            else if (
-                args.menuItemName == "mother" ||
-                args.menuItemName == "daughter" ||
-                args.menuItemName == "wife"
-            )
-                data.gender = "female";
-
-            switch (args.menuItemName) {
-                case "father":
-                    if (!FamilyTree.isNEU(node.mid)) data.pids = [node.mid];
-                    family.addParentNode(args.nodeId, "fid", data);
-                    break;
-                case "mother":
-                    if (!FamilyTree.isNEU(node.fid)) data.pids = [node.fid];
-                    family.addParentNode(args.nodeId, "mid", data);
-                    break;
-                case "son":
-                    if (node.gender == "male") data.fid = args.nodeId;
-                    else if (node.gender == "female") {
-                        data.mid = args.nodeId;
-                        if (node.pids.length > 0) data.fid = node.pids[0];
-                    }
-                    family.addChildNode(data);
-                    break;
-                case "daughter":
-                    if (node.gender == "male") data.fid = args.nodeId;
-                    else if (node.gender == "female") {
-                        data.mid = args.nodeId;
-                        if (node.pids.length > 0) data.fid = node.pids[0];
-                    }
-                    family.addChildNode(data);
-                    break;
-                case "husband":
-                    data.pids = [args.nodeId];
-                    family.addPartnerNode(data);
-                    break;
-                case "wife":
-                    data.pids = [args.nodeId];
-                    family.addPartnerNode(data);
-                    break;
-                default:
-            }
-        });
-
-        family.nodeCircleMenuUI.on("drop", function (sender, args) {
-            family.addClink(args.from, args.to).draw(FamilyTree.action.update);
-        });
-
-        family.nodeCircleMenuUI.on("mouseenter", function (sender, args) {
-            if (args.menuItem.text == "Remove node") {
-                var node = document.querySelector('[data-n-id="' + args.from + '"]');
-                node.style.opacity = 0.5;
-            }
-        });
-
-        family.nodeCircleMenuUI.on("mouseout", function (sender, args) {
-            var node = document.querySelector('[data-n-id="' + args.from + '"]');
-            node.style.opacity = 1;
-        });*/
     </script>
 }

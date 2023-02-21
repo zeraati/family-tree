@@ -18,6 +18,7 @@ namespace FamilyTree.Helper
         public DbSet<PersonSpouse> PersonSpouse { get; set; }
         public DbSet<Job> Job { get; set; }
         public DbSet<Location> Location { get; set; }
+        public DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -56,6 +57,11 @@ namespace FamilyTree.Helper
                 x.HasOne(y => y.Spouse).WithMany(y => y.SpousePerson)
                     .HasForeignKey(y => y.SpouseId)
                     .HasConstraintName("FK_PersonSpouse_Spouse");
+            });
+
+            builder.Entity<User>(x =>
+            {
+                x.HasKey(y => y.UserName);
             });
 
             OnModelCreatingPartial(builder);

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using FamilyTree.Model;
+using FamilyTree.Service.User;
 using Microsoft.AspNetCore.Mvc;
 using FamilyTree.Helper.Extension;
 using FamilyTree.Service.PersonWithFamily;
@@ -9,15 +10,23 @@ namespace FamilyTree.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUserService _userService;
         private readonly IPersonWithFamilyService _personWithFamilyService;
-        public HomeController(ILogger<HomeController> logger, IPersonWithFamilyService personWithFamilyService)
+        public HomeController(ILogger<HomeController> logger, IUserService userService,IPersonWithFamilyService personWithFamilyService)
         {
             _logger = logger;
+            _userService = userService;
             _personWithFamilyService = personWithFamilyService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string username,string pass)
         {
+            var checkUser=(await _userService.CheckUserAsync(username, pass)).Data;
+            if (checkUser == false) { 
+                ViewData["family-tree"] = "IsNotLogin";
+                return View();
+            }
+
             var personFamily = (await _personWithFamilyService.GetAllAsync()).Data;
 
             var familyTree = new List<PersonFamilyTreeDTO>();
@@ -48,7 +57,6 @@ namespace FamilyTree.Controllers
             var result = JsonConvert.SerializeObject(familyTree, setting);
             ViewData["family-tree"] = result;
 
-            if (itemsColorStyle.IsEmpty() == false) itemsColorStyle = "<style>" + itemsColorStyle + "</style>";
             ViewData["item-color-style"] = itemsColorStyle;
 
             return View();

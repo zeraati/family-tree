@@ -1,4 +1,5 @@
 ﻿using FamilyTree.Model.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace FamilyTree.Entity
 {
@@ -24,8 +25,14 @@ namespace FamilyTree.Entity
         }
 
         public int Id { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
+
+        [Required]
         public string LastName { get; set; }
+
+        [Required]
         public GenderEnum GenderId { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
