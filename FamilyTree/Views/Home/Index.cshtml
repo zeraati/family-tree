@@ -66,6 +66,9 @@
 
         var family = new FamilyTree(document.getElementById("tree"), {
             //mouseScrool: FamilyTree.action.none,
+            mouseScrool: FamilyTree.action.scroll,
+            showYScroll: FamilyTree.scroll.visible,
+            showXScroll: FamilyTree.scroll.visible,
             menu: {
                 pdf: { text: "Export PDF" }
             },
@@ -147,6 +150,7 @@
                 text: "Add son",
                 color: "white",
             };
+
             args.menu.daughter = {
                 icon: FamilyTree.icon.daughter(30, 30, "#F57C00"),
                 text: "Add daughter",
