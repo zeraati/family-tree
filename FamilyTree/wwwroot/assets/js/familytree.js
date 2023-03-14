@@ -1711,7 +1711,12 @@ var FamilyTree = function (e, t) {
                             }
                             n.obj.addChildNode(data);
                         } else {
-                            if ("remove" === l && confirm("Remove the person?")) { n.obj.removeNode(i, null, !0); PersonFamilyDelete(i); }
+                            if ("remove" === l) {
+                                if (confirm("Remove the person?")) {
+                                    n.obj.removeNode(i, null, !0);
+                                    PersonFamilyDelete(i);
+                                }
+                            }
                             else if ("svg" === l) n.obj.exportSVG({ filename: "FamilyTree.svg", expandChildren: !1, nodeId: i });
                             else if ("pdf" === l) n.obj.exportPDF({ filename: "FamilyTree.pdf", expandChildren: !1, nodeId: i });
                             else if ("png" === l) n.obj.exportPNG({ filename: "FamilyTree.png", expandChildren: !1, nodeId: i });
