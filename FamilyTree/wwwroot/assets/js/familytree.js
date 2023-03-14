@@ -1523,26 +1523,28 @@ var FamilyTree = function (e, t) {
         var o = { firstNodeId: i, secondNodeId: r, menu: a };
         if (!1 === FamilyTree.events.publish("show", [this, o])) return !1;
 
-        let fatherItem = o.menu['father'];
-        let motherItem = o.menu['mother'];
-        let wifeItem = o.menu['wife'];
-        let husbandItem = o.menu['husband'];
-        let sonItem = o.menu['son'];
-        let daughterItem = o.menu['daughter'];
-        let detailsItem = o.menu['details'];
-        let editItem = o.menu['edit'];
-        let removeItem = o.menu['remove'];
+        if (o.menu != null) {
+            let fatherItem = o.menu['father'];
+            let motherItem = o.menu['mother'];
+            let wifeItem = o.menu['wife'];
+            let husbandItem = o.menu['husband'];
+            let sonItem = o.menu['son'];
+            let daughterItem = o.menu['daughter'];
+            let detailsItem = o.menu['details'];
+            let editItem = o.menu['edit'];
+            let removeItem = o.menu['remove'];
 
-        o.menu = {};
-        if (fatherItem !== undefined) o.menu.father = fatherItem;
-        if (motherItem !== undefined) o.menu.mother = motherItem;
-        if (wifeItem !== undefined) o.menu.wife = wifeItem;
-        if (husbandItem !== undefined) o.menu.husband = husbandItem;
-        if (sonItem !== undefined) o.menu.son = sonItem;
-        if (daughterItem !== undefined) o.menu.daughter = daughterItem;
-        if (detailsItem !== undefined) o.menu.details = detailsItem;
-        if (editItem !== undefined) o.menu.edit = editItem;
-        if (removeItem !== undefined) o.menu.remove = removeItem;
+            o.menu = {};
+            if (fatherItem !== undefined) o.menu.father = fatherItem;
+            if (motherItem !== undefined) o.menu.mother = motherItem;
+            if (wifeItem !== undefined) o.menu.wife = wifeItem;
+            if (husbandItem !== undefined) o.menu.husband = husbandItem;
+            if (sonItem !== undefined) o.menu.son = sonItem;
+            if (daughterItem !== undefined) o.menu.daughter = daughterItem;
+            if (detailsItem !== undefined) o.menu.details = detailsItem;
+            if (editItem !== undefined) o.menu.edit = editItem;
+            if (removeItem !== undefined) o.menu.remove = removeItem;
+        }
 
         for (var s in (a = o.menu)) {
 
@@ -5337,7 +5339,7 @@ var FamilyTree = function (e, t) {
         nodeTreeMenuButton: '<use data-ctrl-n-t-menu-id="{id}" x="10" y="10" xlink:href="#base_tree_menu"/>',
         nodeTreeMenuCloseButton: '<use data-ctrl-n-t-menu-c="" x="10" y="10" xlink:href="#base_tree_menu_close"/>',
         up: '<use x="110" y="-10" xlink:href="#base_up"/>',
-        img_0: '<use xlink:href="#base_img_0_stroke" /><image preserveAspectRatio="xMidYMid slice" clip-path="url(#base_img_0)" xlink:href="{val}"  x="170" y="-5"  width="70" height="70"></image>',
+        img_0: '<use xlink:href="#base_img_0_stroke" /><image class="person-photo" preserveAspectRatio="xMidYMid slice" clip-path="url(#base_img_0)" xlink:href="{val}"  x="170" y="-5"  width="70" height="70"></image>',
         link_field_0: '<text text-anchor="middle" fill="#aeaeae" ' + FamilyTree.attr.width + '="290" x="0" y="0" style="font-size:10px;">{val}</text>',
     }),
     (FamilyTree.templates.dot = Object.assign({}, FamilyTree.templates.base)),

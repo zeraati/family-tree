@@ -18,7 +18,10 @@
             height: 100%;
         }
 
-    @Html.Raw(ViewData["item-color-style"])
+        .person-photo {transition: transform .2s;transform-origin:10.5% 5.5%}
+        .person-photo:hover {transform:scale(1.8);transform-origin:10.5% 5.5%}
+
+        @Html.Raw(ViewData["item-color-style"])
 
     </style>
 }
@@ -74,6 +77,7 @@
             },
             nodeBinding: {
                 field_0: "name",
+                field_1: 'deathDate',
                 img_0: "photo"
             },
             nodes: data,
