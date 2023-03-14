@@ -1531,6 +1531,7 @@ var FamilyTree = function (e, t) {
         let daughterItem = o.menu['daughter'];
         let detailsItem = o.menu['details'];
         let editItem = o.menu['edit'];
+        let removeItem = o.menu['remove'];
 
         o.menu = {};
         if (fatherItem !== undefined) o.menu.father = fatherItem;
@@ -1541,12 +1542,14 @@ var FamilyTree = function (e, t) {
         if (daughterItem !== undefined) o.menu.daughter = daughterItem;
         if (detailsItem !== undefined) o.menu.details = detailsItem;
         if (editItem !== undefined) o.menu.edit = editItem;
+        if (removeItem !== undefined) o.menu.remove = removeItem;
 
         for (var s in (a = o.menu)) {
 
             if (s == 'mother' && fatherItem !== undefined) continue;
             if (s == 'husband' && wifeItem !== undefined) continue;
             if (s == 'daughter' && sonItem !== undefined) continue;
+            if (s == 'remove') continue;
 
             if (s == 'father' && motherItem !== undefined) {
                 let fatherDiv = '';
@@ -1608,6 +1611,26 @@ var FamilyTree = function (e, t) {
                 l += menuItem;
             }
 
+            else if (s == 'edit') {
+                let editDiv = '';
+                let icon = editItem.icon;
+                let text = editItem.text;
+                void 0 === icon && (icon = FamilyTree.icon['edit'] ? FamilyTree.icon['edit'](24, 24, "#7A7A7A") : ""),
+                    "function" == typeof text && (text = text()),
+                    "function" == typeof icon && (icon = icon()),
+                    (editDiv = "<div " + FamilyTree.attr.item + '="edit">' + icon + "<span>&nbsp;&nbsp;" + text + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>");
+
+                let removeDiv = '';
+                icon = removeItem.icon;
+                text = removeItem.text;
+                void 0 === icon && (icon = FamilyTree.icon['remove'] ? FamilyTree.icon['remove'](24, 24, "#7A7A7A") : ""),
+                    "function" == typeof text && (text = text()),
+                    "function" == typeof icon && (icon = icon()),
+                    (removeDiv = "<div " + FamilyTree.attr.item + '="remove">' + icon + "<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + text + "</span></div>");
+                let menuItem = '<div style="display:flex">' + editDiv + removeDiv + '</div>';
+                l += menuItem;
+            }
+
             else {
                 var d = a[s].icon,
                     c = a[s].text;
@@ -1617,6 +1640,7 @@ var FamilyTree = function (e, t) {
                     (l += "<div " + FamilyTree.attr.item + '="' + s + '">' + d + "<span>&nbsp;&nbsp;" + c + "</span></div>");
             }
         }
+
         if ("" != l) {
             if (
                 ((this.wrapper = document.createElement("div")),
@@ -1686,20 +1710,15 @@ var FamilyTree = function (e, t) {
                                 if (s.pids.length > 0) data.fid = s.pids[0];
                             }
                             n.obj.addChildNode(data);
-                        } else
-                            "remove" === l
-                                ? n.obj.removeNode(i, null, !0)
-                                : "svg" === l
-                                    ? n.obj.exportSVG({ filename: "FamilyTree.svg", expandChildren: !1, nodeId: i })
-                                    : "pdf" === l
-                                        ? n.obj.exportPDF({ filename: "FamilyTree.pdf", expandChildren: !1, nodeId: i })
-                                        : "png" === l
-                                            ? n.obj.exportPNG({ filename: "FamilyTree.png", expandChildren: !1, nodeId: i })
-                                            : "csv" === l
-                                                ? n.obj.exportCSV()
-                                                : "xml" === l
-                                                    ? n.obj.exportXML()
-                                                    : "json" === l && n.obj.exportJSON();
+                        } else {
+                            if ("remove" === l && confirm("Remove the person?")) { n.obj.removeNode(i, null, !0); PersonFamilyDelete(i); }
+                            else if ("svg" === l) n.obj.exportSVG({ filename: "FamilyTree.svg", expandChildren: !1, nodeId: i });
+                            else if ("pdf" === l) n.obj.exportPDF({ filename: "FamilyTree.pdf", expandChildren: !1, nodeId: i });
+                            else if ("png" === l) n.obj.exportPNG({ filename: "FamilyTree.png", expandChildren: !1, nodeId: i });
+                            else if ("csv" === l) n.obj.exportCSV();
+                            else if ("xml" === l) n.obj.exportXML();
+                            else if ("json" === l && n.obj.exportJSON()) { }
+                        }
                     else t = a[l].onClick.call(n.obj, i, r);
                     0 != t && n.hide();
                 });
